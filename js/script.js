@@ -1,6 +1,15 @@
+/*********************************************************************************************
+// Teamtreehouse - Full Stack Javascript Techdegree                                           /
+// FSJS - Random Quote Generator : Core and Exceeds credits included in code                   /
+// Project 1                                                                                  /
+// DatPhamQuoc
+// Shooting for "Exceed Expectations"
+**********************************************************************************************/
 
-var checkNum = [];
-var quotes = [ // Create the array of quote objects
+/***********************************************************************************************/
+
+// Create the array of quote objects
+let quotes = [
   {quote: 'It\'s not the size of the dog in the fight, but the size of the fight in the dog.',
   source: 'Archie Griffen',
   tag: 'Humor'},
@@ -68,6 +77,8 @@ var quotes = [ // Create the array of quote objects
   tag: 'Motivation'}
 ];
 
+let checkNum = [];
+let i = 0;
 
 //Create random RGB color string
 function rndRGB() {
@@ -77,9 +88,18 @@ function rndRGB() {
   return 'rgb(' + num1 +', ' + num2 + ', ' + num3 +')';
 }
 
+//Create auto-reset counter to change quote after every 15s
+function count () {
+  i ++;
+  if (i === 15) {
+    printQuote();
+    i = 0;
+  }
+}
+
 /*
-Next 3 function used to created random numnber that do not repeat itself until all quotes in the array ared displayed.
-When every quote is displayed once,the checkNum array becomes empty and it's re-filled to execute next cycle.
+Next 3 function used to created random numnber that do not repeat itself until all quotes in the array ared displayed once.
+When every quote is displayed,the checkNum array becomes empty and it's re-filled to execute next cycle.
 */
 
 //1-Fill the checkNum array with number from 0 to  quotes.length -1
@@ -89,21 +109,22 @@ function fillCheckNum() {
   }
   return checkNum;
 }
+
 //2-Select a random number from checkNum's items
 function numFromCheckNum (){
-  var index = Math.floor(Math.random()*checkNum.length);
-  var randomNum = checkNum[index];
-  checkNum.splice(index,1) //remove selected item from checkNum array
+  let index = Math.floor(Math.random()*checkNum.length);
+  let randomNum = checkNum[index];
+  checkNum.splice(index,1); //remove selected item from checkNum array
   return randomNum;
 }
 
 //3-Return number form CheckNum array. Re-create the array if it's empty.
 function getNum () {
   if (checkNum.length !== 0) {
-    return numFromCheckNum()
+    return numFromCheckNum();
   }else {
     fillCheckNum()
-    return numFromCheckNum()
+    return numFromCheckNum();
   }
 }
 
@@ -114,9 +135,9 @@ function getRandomQuuote(array) {
 
 //Print quote to the screen and change color
 function printQuote() {
-   var color =  rndRGB();
-   var object = getRandomQuuote(quotes);
-   var string = '';
+   let color =  rndRGB();
+   let object = getRandomQuuote(quotes);
+   let string = '';
    if (object.citation !== undefined && object.year !== undefined) {
      string = "<p class=\"quote\">" + " " + object.quote + "</p>" + "\n" +
               "<p class=\"source\">" + object.source + "\n" +
@@ -145,11 +166,10 @@ function printQuote() {
   document.getElementById('quote-box').innerHTML = string;
   document.getElementById('loadQuote').style.backgroundColor = color;
   document.getElementsByTagName('body')[0].style.backgroundColor = color;
+  i = 0;  // reset counter after the button is clicked
 }
 
-//Display first random quote on screen
-printQuote();
-//Respond to "Show another quote" button clicks
-document.getElementById('loadQuote').addEventListener("click", printQuote, false);
 
-var time = setInterval(printQuote, 30000);
+printQuote();  //Display first random quote on screen
+document.getElementById('loadQuote').addEventListener("click", printQuote, false);  //Respond to "Show another quote" button clicks
+setInterval(count, 1000); //start counting
